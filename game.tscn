@@ -1,0 +1,71 @@
+[gd_scene load_steps=11 format=3 uid="uid://cnco7afdlh24l"]
+
+[ext_resource type="Script" path="res://entities/player.gd" id="1_3qnxg"]
+[ext_resource type="Texture2D" uid="uid://c8a082ga1spjj" path="res://assets/soccer_field.png" id="1_sa4vv"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lv0hr"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_tkswt"]
+sky_material = SubResource("ProceduralSkyMaterial_lv0hr")
+
+[sub_resource type="Environment" id="Environment_o6hid"]
+background_mode = 2
+sky = SubResource("Sky_tkswt")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b2aks"]
+size = Vector3(50, 1, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5rx0d"]
+albedo_texture = ExtResource("1_sa4vv")
+uv1_offset = Vector3(0.99, -0.27, 0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_27aw1"]
+material = SubResource("StandardMaterial3D_5rx0d")
+size = Vector3(50, 1, 50)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6l4ou"]
+radius = 0.25
+height = 1.5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_tvcx7"]
+radius = 0.25
+height = 1.5
+
+[node name="Game" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_o6hid")
+
+[node name="Ground" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionBody" type="StaticBody3D" parent="Ground"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/CollisionBody"]
+shape = SubResource("BoxShape3D_b2aks")
+
+[node name="Geometry" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_27aw1")
+skeleton = NodePath("../CollisionBody")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+script = ExtResource("1_3qnxg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("CapsuleShape3D_6l4ou")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("CapsuleMesh_tvcx7")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.538418, 0.842678, 0, -0.842678, 0.538418, 0, 4.80808, 2.50924)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.556122, 0.831101, 0, -0.831101, 0.556122, 0, 14.511, 6.24063)
+shadow_enabled = true
