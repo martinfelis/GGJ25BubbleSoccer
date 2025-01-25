@@ -1,27 +1,93 @@
-[gd_resource type="BehaviorTree" load_steps=9 format=3 uid="uid://cf3rlm1rjpsvi"]
+[gd_resource type="BehaviorTree" load_steps=27 format=3 uid="uid://cf3rlm1rjpsvi"]
 
-[ext_resource type="Script" path="res://ai/tasks/find_ball_attack_location.gd" id="1_0iuqv"]
+[ext_resource type="Script" path="res://ai/tasks/find_closest_goal_location.gd" id="2_4rs0y"]
 [ext_resource type="Script" path="res://ai/tasks/move_to_target_location.gd" id="2_fs37m"]
+[ext_resource type="Script" path="res://ai/tasks/calculate_target_distance.gd" id="3_aqybk"]
+[ext_resource type="Script" path="res://ai/tasks/find_closest_ball_location.gd" id="3_hp412"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_o815l"]
+
+[sub_resource type="BTAction" id="BTAction_3lekf"]
+script = ExtResource("2_4rs0y")
+
+[sub_resource type="BBVariant" id="BBVariant_j2dxh"]
+saved_value = null
+resource_name = "<null>"
+
+[sub_resource type="BTCheckAgentProperty" id="BTCheckAgentProperty_42wa3"]
+property = &"connected_ball"
+check_type = 5
+value = SubResource("BBVariant_j2dxh")
+
+[sub_resource type="BTAction" id="BTAction_8j6vt"]
+script = ExtResource("2_fs37m")
+
+[sub_resource type="BTAction" id="BTAction_pr5fb"]
+script = ExtResource("3_aqybk")
+
+[sub_resource type="BBVariant" id="BBVariant_at63p"]
+type = 3
+saved_value = 10.0
+resource_name = "10"
+
+[sub_resource type="BTCheckVar" id="BTCheckVar_mw65f"]
+variable = &"target_distance"
+check_type = 1
+value = SubResource("BBVariant_at63p")
+
+[sub_resource type="BBVariant" id="BBVariant_xdhi4"]
+type = 1
+saved_value = true
+resource_name = "true"
+
+[sub_resource type="BTSetAgentProperty" id="BTSetAgentProperty_gi0dw"]
+property = &"do_shoot"
+value = SubResource("BBVariant_xdhi4")
+
+[sub_resource type="BTSequence" id="BTSequence_82p4v"]
+children = [SubResource("BTCheckVar_mw65f"), SubResource("BTSetAgentProperty_gi0dw")]
+
+[sub_resource type="BTParallel" id="BTParallel_7l44m"]
+children = [SubResource("BTCheckAgentProperty_42wa3"), SubResource("BTAction_8j6vt"), SubResource("BTAction_pr5fb"), SubResource("BTSequence_82p4v")]
+
+[sub_resource type="BTAction" id="BTAction_7s4et"]
+script = ExtResource("2_4rs0y")
+
+[sub_resource type="BTSequence" id="BTSequence_0gccb"]
+custom_name = "Dribbling"
+children = [SubResource("BTAction_3lekf"), SubResource("BTParallel_7l44m"), SubResource("BTAction_7s4et")]
+
+[sub_resource type="BTAction" id="BTAction_bfjcr"]
+script = ExtResource("3_hp412")
+
+[sub_resource type="BBVariant" id="BBVariant_etxof"]
+type = 24
+value_source = 1
+variable = &"ball_location"
+resource_name = "$ball_location"
+
+[sub_resource type="BTSetVar" id="BTSetVar_qdbmy"]
+variable = &"target_location"
+value = SubResource("BBVariant_etxof")
 
 [sub_resource type="BTAction" id="BTAction_kaasl"]
 script = ExtResource("2_fs37m")
 
-[sub_resource type="BTAction" id="BTAction_yulh3"]
-script = ExtResource("1_0iuqv")
-
 [sub_resource type="BTParallel" id="BTParallel_6l01j"]
 num_successes_required = 2
 num_failures_required = 2
-children = [SubResource("BTAction_kaasl"), SubResource("BTAction_yulh3")]
+children = [SubResource("BTAction_bfjcr"), SubResource("BTSetVar_qdbmy"), SubResource("BTAction_kaasl")]
 
 [sub_resource type="BTSequence" id="BTSequence_al58p"]
+custom_name = "ChaseBall"
 children = [SubResource("BTParallel_6l01j")]
+
+[sub_resource type="BTSelector" id="BTSelector_es7o5"]
+children = [SubResource("BTSequence_0gccb"), SubResource("BTSequence_al58p")]
 
 [sub_resource type="BTRepeat" id="BTRepeat_jwilj"]
 forever = true
-children = [SubResource("BTSequence_al58p")]
+children = [SubResource("BTSelector_es7o5")]
 
 [resource]
 blackboard_plan = SubResource("BlackboardPlan_o815l")

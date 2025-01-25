@@ -40,6 +40,14 @@ func on_ball_reset(ball:Ball) -> void:
 	ball.global_position = Vector3(randf() -0.5, 0.5, randf() - 0.5)
 	ball.linear_velocity = Vector3(randf() -0.5, 2, randf() - 0.5) * 5
 
+	var connected_player = ball.connected_player
+
+	if ball.connected_player:
+		ball.connected_player = null
+	
+	if connected_player:
+		connected_player.connected_ball = null
+
 func on_goal_ball_detected(goal:Goal, ball:Ball):
 	if goal.team_name == goal.TeamName.BLUE:
 		red_score += 1
@@ -47,7 +55,7 @@ func on_goal_ball_detected(goal:Goal, ball:Ball):
 		blue_score += 1
 	
 	score_updated.emit()
-	
+
 	on_ball_reset(ball)
 
 func _on_game_field_area_body_entered(body: Node3D) -> void:

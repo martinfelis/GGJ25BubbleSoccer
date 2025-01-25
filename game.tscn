@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cnco7afdlh24l"]
+[gd_scene load_steps=18 format=3 uid="uid://cnco7afdlh24l"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_dek3o"]
 [ext_resource type="Texture2D" uid="uid://c8a082ga1spjj" path="res://assets/soccer_field.png" id="1_sa4vv"]
@@ -43,9 +43,6 @@ size = Vector3(50, 1, 25)
 [sub_resource type="BoxShape3D" id="BoxShape3D_0w64d"]
 size = Vector3(50, 50, 25)
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2b660"]
-bounce = 1.0
-
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bdwla"]
 friction = 0.5
 bounce = 1.0
@@ -62,7 +59,7 @@ environment = SubResource("Environment_o6hid")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.538418, 0.842678, 0, -0.842678, 0.538418, 0, 16.3592, 10.4029)
+transform = Transform3D(1, 0, 0, 0, 0.538418, 0.842678, 0, -0.842678, 0.538418, 0, 12.1579, 7.08105)
 
 [node name="Level" type="Node3D" parent="."]
 unique_name_in_owner = true
@@ -111,19 +108,28 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -26, 2
 team_name = 1
 
 [node name="Player" parent="." instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.903766, 0, 0.428026, 0, 1, 0, -0.428026, 0, 0.903766, 1.63456, -2.38419e-07, -1.97999)
+transform = Transform3D(0.770941, 0, 0.636907, 0, 1, 0, -0.636907, 0, 0.770941, 1.56998, -1.19209e-06, 4.64097)
 team_name = 1
 is_player_controlled = true
 
 [node name="NPCs" type="Node3D" parent="."]
 
-[node name="NPC1" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.771159, 0, 0.636643, 0, 1, 0, -0.636643, 0, 0.771159, -4.37086, 4.62931, -7.33538)
-physics_material_override = SubResource("PhysicsMaterial_2b660")
+[node name="SoccerPlayer7" parent="NPCs" instance=ExtResource("2_aa43i")]
+transform = Transform3D(0.771158, 0, 0.636644, 0, 1, 0, -0.636644, 0, 0.771158, 14.8729, 0, -4.94543)
+team_name = 1
 
-[node name="NPC4" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.771159, 0, 0.636643, 0, 1, 0, -0.636643, 0, 0.771159, -5.11707, 4.62931, -12.0869)
-physics_material_override = SubResource("PhysicsMaterial_2b660")
+[node name="SoccerPlayer8" parent="NPCs" instance=ExtResource("2_aa43i")]
+transform = Transform3D(0.771158, 0, -0.636644, 0, 1, 0, 0.636644, 0, 0.771158, 8.70809, 0, 7.07675)
+team_name = 1
+
+[node name="SoccerPlayer9" parent="NPCs" instance=ExtResource("2_aa43i")]
+transform = Transform3D(0.77391, 0, 0.633295, 0, 1, 0, -0.633295, 0, 0.77391, -6.92624, 1.90735e-06, 6.92673)
+
+[node name="SoccerPlayer10" parent="NPCs" instance=ExtResource("2_aa43i")]
+transform = Transform3D(0.770267, 0, -0.637722, 0, 1, 0, 0.637722, 0, 0.770267, -0.850314, 0, -5.09894)
+
+[node name="SoccerPlayer11" parent="NPCs" instance=ExtResource("2_aa43i")]
+transform = Transform3D(0.771158, 0, 0.636644, 0, 1, 0, -0.636644, 0, 0.771158, -10.9856, 0, -6.18296)
 
 [node name="Balls" type="Node3D" parent="."]
 
@@ -131,19 +137,19 @@ physics_material_override = SubResource("PhysicsMaterial_2b660")
 physics_material_override = SubResource("PhysicsMaterial_bdwla")
 
 [node name="Ball2" parent="Balls" instance=ExtResource("4_iix87")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.99916, 0.256, -3.49412)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19845, 0.256001, -1.95788)
 physics_material_override = SubResource("PhysicsMaterial_bdwla")
 
 [node name="Ball3" parent="Balls" instance=ExtResource("4_iix87")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.57971, 0.256, -3.35763)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.40983, 0.255998, -1.01343)
 physics_material_override = SubResource("PhysicsMaterial_bdwla")
 
 [node name="Ball4" parent="Balls" instance=ExtResource("4_iix87")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.44604, 0.256, 2.54074)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.60782, 0.256, 2.29628)
 physics_material_override = SubResource("PhysicsMaterial_bdwla")
 
 [node name="Ball5" parent="Balls" instance=ExtResource("4_iix87")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.42805, 0.256, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.67405, 0.255999, 1.28869)
 physics_material_override = SubResource("PhysicsMaterial_bdwla")
 
 [connection signal="body_entered" from="Level/GameFieldArea" to="." method="_on_game_field_area_body_entered"]

@@ -15,11 +15,15 @@ enum TeamName {RED, BLUE}
 
 # constants
 const SPEED:float = 20.0
+const SPEED_WITH_BALL:float = 10.0
 const ACCEL:float = 34.0
+const SHOOT_SPEED:float = 10.0
 const JUMP_VELOCITY:float = 4.5
 const BOUNCE_ACCEL_TIMEOUT:float = 1
 const BLUE_MATERIAL:Material = preload("res://materials/team_blue_material.tres")
 const RED_MATERIAL:Material = preload("res://materials/team_red_material.tres")
+# const BLUE_PLAYER_MATERIAL:Material = preload("res://materials/team_blue_material.tres")
+# const RED_PLAYER_MATERIAL:Material = preload("res://materials/team_red_player_material.tres")
 
 # @export variables
 @export var project_velocity_on_direction:bool = true
@@ -42,14 +46,17 @@ const RED_MATERIAL:Material = preload("res://materials/team_red_material.tres")
 @onready var hair: MeshInstance3D = %Hair
 
 var steering_target:Vector3 = Vector3.ZERO
+var do_shoot:bool = false
 var is_steering_active:bool = false
+var connected_ball:Ball = null
 
 # private variables
 var _look_angle:float = 0
 var _last_look_angle:float = 0
-var _planar_steering_direction:Vector3 = Vector3.BACK * 0.01
 var _look_angle_spring = SpringDamper.new(0, 4, 0.06, 0.03)
 var _is_on_floor:bool = false
+
+var _planar_steering_direction:Vector3 = Vector3.BACK * 0.01
 
 func _ready() -> void:
 	_look_angle = -global_transform.basis.z.signed_angle_to(Vector3.FORWARD, Vector3.UP)
@@ -103,7 +110,11 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 			steering_tangential = _planar_steering_direction.dot(planar_velocity) * planar_velocity.normalized()
 			steering_orthogonal = _planar_steering_direction - steering_tangential
 	
-	if planar_speed < SPEED or steering_tangential.dot(planar_velocity) <= 0:
+	var max_speed = SPEED
+	if connected_ball:
+		max_speed = SPEED_WITH_BALL
+	
+	if planar_speed < max_speed or steering_tangential.dot(planar_velocity) <= 0:
 		state.apply_central_force(_planar_steering_direction * ACCEL)
 	else:
 		state.apply_central_force(steering_orthogonal * ACCEL)
@@ -111,6 +122,9 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 func _handle_player_controls() -> void:
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	_planar_steering_direction = Vector3(input_dir.x, 0, input_dir.y).normalized()
+	
+	if Input.is_action_just_pressed("shoot"):
+		do_shoot = true
 
 func update_look_direction(delta:float) -> void:
 	var planar_velocity = Vector3(linear_velocity.x, 0, linear_velocity.z)
@@ -144,33 +158,37 @@ func update_steering() -> void:
 		_planar_steering_direction = Vector3.ZERO
 
 func _physics_process(delta: float) -> void:
-	DebugDraw2D.set_text(name + ".is_steering_active", str(is_steering_active))
-	DebugDraw2D.set_text(name + "._is_on_floor", str(_is_on_floor))
-
 	update_steering()
 
 	update_look_direction(delta)
+
+	if do_shoot and connected_ball:
+		if team_name == TeamName.BLUE:
+			connected_ball.ignore_timer_blue = 1
+		else:
+			connected_ball.ignore_timer_red = 1
+			
+		connected_ball.linear_velocity = linear_velocity - global_basis.z * SHOOT_SPEED
+		connected_ball.connected_player = null
+		connected_ball = null
+	else:
+		do_shoot = false
 	
 	DebugDraw3D.draw_arrow(global_position + Vector3.UP * 0.1, global_position + _planar_steering_direction * 5  + Vector3.UP * 0.1, Color.RED, 0.4, true)
 	
 	basis = Basis.from_euler(Vector3(0, _look_angle, 0))
+	
+	if connected_ball:
+		connected_ball.global_position = global_position - global_basis.z * 1.3 + Vector3.UP * 0.3
 
 func _on_body_entered(body: Node) -> void:
 	var other_soccer_player:SoccerPlayer = body as SoccerPlayer
 	if not other_soccer_player:
 		return
-	
-	#if other_soccer_player and _bounce_timeout == 0 and is_player_controlled:
-		#var relative_velocity:Vector3 = other_soccer_player.linear_velocity - linear_velocity
-		#var vector_to_body:Vector3 = other_soccer_player.global_position - global_position
-		#var direction_to_body = vector_to_body.normalized()
-		#_bounce_timeout = BOUNCE_ACCEL_TIMEOUT
-		#_velocity = linear_velocity
-		#other_soccer_player._velocity = other_soccer_player.linear_velocity
-		
-		#if relative_velocity.dot(direction_to_body) > 0:
-			#vector_to_body.y = 0
-#			other_soccer_player.apply_impulse((vector_to_body).normalized() * 2)
 
-			#_velocity = Vector3.ZERO
-			
+func _on_ball_detection_area_body_entered(body: Node3D) -> void:
+		var ball:Ball = body as Ball
+		
+		if ball and connected_ball == null:
+			connected_ball = ball
+			connected_ball.connected_player = self
