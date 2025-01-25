@@ -45,9 +45,9 @@ var steering_target:Vector3 = Vector3.ZERO
 var is_steering_active:bool = false
 
 # private variables
-var _velocity:Vector3 = Vector3.ZERO
 var _look_angle:float = 0
-var _planar_steering_direction:Vector3 = Vector3.ZERO
+var _last_look_angle:float = 0
+var _planar_steering_direction:Vector3 = Vector3.BACK * 0.01
 var _look_angle_spring = SpringDamper.new(0, 4, 0.06, 0.03)
 var _is_on_floor:bool = false
 
@@ -70,7 +70,6 @@ func set_team(team:TeamName):
 	else:
 		bubble_body.set_surface_override_material(0, BLUE_MATERIAL)
 		hair.set_surface_override_material(0, BLUE_MATERIAL)
-
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	_is_on_floor = false
@@ -107,20 +106,17 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	else:
 		state.apply_central_force(steering_orthogonal * ACCEL)
 
-
 func _handle_player_controls() -> void:
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	_planar_steering_direction = Vector3(input_dir.x, 0, input_dir.y).normalized()
 
 func update_look_direction(delta:float) -> void:
-	var planar_velocity = Vector3(_velocity.x, 0, _velocity.z)
+	var planar_velocity = Vector3(linear_velocity.x, 0, linear_velocity.z)
 	
 	var current_look_angle = _look_angle
-	var target_look_angle = _look_angle
+	var target_look_angle = _last_look_angle
 	
-	if planar_velocity:
+	if planar_velocity.length() > 0.1:
 		target_look_angle = -planar_velocity.signed_angle_to(Vector3.FORWARD, Vector3.UP)
 	elif _planar_steering_direction:
 		target_look_angle = -_planar_steering_direction.signed_angle_to(Vector3.FORWARD, Vector3.UP)
@@ -130,10 +126,8 @@ func update_look_direction(delta:float) -> void:
 	elif current_look_angle - target_look_angle > PI:
 		current_look_angle = current_look_angle - 2 * PI
 
-	if not is_player_controlled:
-		DebugDraw2D.set_text("is_steering_active", str(is_steering_active))
-
 	_look_angle = _look_angle_spring.calc(current_look_angle, target_look_angle, delta)
+	_last_look_angle = _look_angle
 
 func update_steering() -> void:
 	if is_player_controlled:
@@ -148,8 +142,6 @@ func update_steering() -> void:
 func _physics_process(delta: float) -> void:
 	DebugDraw2D.set_text(name + ".is_steering_active", str(is_steering_active))
 	DebugDraw2D.set_text(name + "._is_on_floor", str(_is_on_floor))
-
-	_velocity = linear_velocity
 
 	update_steering()
 
