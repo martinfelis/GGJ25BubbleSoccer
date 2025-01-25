@@ -3,15 +3,18 @@
 [ext_resource type="Script" path="res://world/goal.gd" id="1_uywiv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qp4hq"]
-size = Vector3(3, 4, 6)
+size = Vector3(2.68408, 2.46326, 5.47955)
 
 [node name="Goal" type="Node3D" groups=["Goal"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 script = ExtResource("1_uywiv")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="BallDetector" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 8
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BallDetector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.157959, -0.768372, 0.0533142)
 shape = SubResource("BoxShape3D_qp4hq")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
@@ -23,3 +26,5 @@ size = Vector3(3, 2.87903, 6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22442, -0.229276, 0.0278077)
 operation = 2
 size = Vector3(2.93799, 2.78986, 5.53325)
+
+[connection signal="body_entered" from="BallDetector" to="." method="_on_ball_detector_body_entered"]

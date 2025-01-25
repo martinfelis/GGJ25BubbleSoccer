@@ -9,7 +9,7 @@ enum TeamName {RED, BLUE}
 @export var team_name: TeamName :
 	set(value):
 		team_name = value
-		set_team(team_name)
+		update_team()
 	get:
 		return team_name
 
@@ -54,13 +54,13 @@ var _is_on_floor:bool = false
 func _ready() -> void:
 	_look_angle = -global_transform.basis.z.signed_angle_to(Vector3.FORWARD, Vector3.UP)
 	
-	set_team(team_name)
+	update_team()
 	
 	if not is_player_controlled:
 		bt_player.active = true
 		add_to_group("NPCPlayer")
 
-func set_team(team:TeamName):
+func update_team():
 	if not is_instance_valid(bubble_body) or not is_instance_valid(hair):
 		return
 		
@@ -120,6 +120,8 @@ func update_look_direction(delta:float) -> void:
 		target_look_angle = -planar_velocity.signed_angle_to(Vector3.FORWARD, Vector3.UP)
 	elif _planar_steering_direction:
 		target_look_angle = -_planar_steering_direction.signed_angle_to(Vector3.FORWARD, Vector3.UP)
+
+	assert(is_finite(target_look_angle))
 
 	if target_look_angle - current_look_angle > PI:
 		current_look_angle = current_look_angle + 2 * PI
