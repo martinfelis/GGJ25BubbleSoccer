@@ -1,24 +1,113 @@
-[gd_scene load_steps=7 format=3 uid="uid://bkhlgdnuwnhx5"]
+[gd_scene load_steps=30 format=3 uid="uid://bkhlgdnuwnhx5"]
 
 [ext_resource type="Script" path="res://entities/soccer_player.gd" id="1_4spwj"]
+[ext_resource type="Script" path="res://ai/tasks/find_closest_ball_location.gd" id="2_ejshh"]
+[ext_resource type="Script" path="res://ai/tasks/move_to_target_location.gd" id="3_gnlfn"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a1iwp"]
-friction = 0.3
+friction = 0.0
 bounce = 1.0
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6l4ou"]
-height = 1.2
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_yxxuy"]
+height = 1.39568
+radius = 1.0
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_qya11"]
-height = 1.2
+radius = 1.0
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_tvcx7"]
-radius = 0.25
-height = 1.5
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_o815l"]
+
+[sub_resource type="BTAction" id="BTAction_4qfvo"]
+script = ExtResource("2_ejshh")
+
+[sub_resource type="BTAction" id="BTAction_kaasl"]
+script = ExtResource("3_gnlfn")
+steering_desired_distance = 1.0
+
+[sub_resource type="BTAction" id="BTAction_usv31"]
+script = ExtResource("2_ejshh")
+
+[sub_resource type="BTParallel" id="BTParallel_6l01j"]
+num_successes_required = 2
+num_failures_required = 2
+children = [SubResource("BTAction_4qfvo"), SubResource("BTAction_kaasl"), SubResource("BTAction_usv31")]
+
+[sub_resource type="BTSequence" id="BTSequence_al58p"]
+children = [SubResource("BTParallel_6l01j")]
+
+[sub_resource type="BTRepeat" id="BTRepeat_jwilj"]
+forever = true
+children = [SubResource("BTSequence_al58p")]
+
+[sub_resource type="BehaviorTree" id="BehaviorTree_8c20v"]
+blackboard_plan = SubResource("BlackboardPlan_o815l")
+root_task = SubResource("BTRepeat_jwilj")
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_k6pf5"]
 
-[node name="Player" type="RigidBody3D" groups=["SoccerPlayer"]]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_tvcx7"]
+radius = 0.4
+height = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fxw6s"]
+albedo_color = Color(0.989644, 0.614071, 0.473106, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_j5fex"]
+material = SubResource("StandardMaterial3D_fxw6s")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dkxll"]
+albedo_color = Color(0.989644, 0.614071, 0.473106, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_4wlqi"]
+material = SubResource("StandardMaterial3D_dkxll")
+radius = 0.1
+height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3tnhw"]
+albedo_color = Color(0.310617, 0.310617, 0.310617, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_tsdu5"]
+material = SubResource("StandardMaterial3D_3tnhw")
+custom_aabb = AABB(0, 0, 0, 0, 0, 8.435)
+radius = 0.1
+height = 0.2
+
+[sub_resource type="Curve" id="Curve_kd6bb"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.38024, 0.20283), 0.0, 0.0, 0, 0, Vector2(0.580838, 0.225825), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_uf2o5"]
+curve = SubResource("Curve_kd6bb")
+
+[sub_resource type="Curve" id="Curve_k0cow"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.407186, 1), 0.0, 0.0, 0, 0, Vector2(0.703593, 1), 0.0, 0.0, 0, 0, Vector2(0.976048, 0.149175), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_p3nog"]
+curve = SubResource("Curve_k0cow")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_d07ft"]
+angle_min = -114.8
+angle_max = 247.7
+direction = Vector3(0, 1, 0)
+spread = 5.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.5
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_p3nog")
+alpha_curve = SubResource("CurveTexture_uf2o5")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ynmj"]
+transparency = 1
+blend_mode = 1
+albedo_color = Color(0.454902, 0.454902, 0.454902, 0.662745)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ay2up"]
+material = SubResource("StandardMaterial3D_5ynmj")
+radial_segments = 8
+rings = 3
+
+[node name="SoccerPlayer" type="RigidBody3D" groups=["SoccerPlayer"]]
 collision_layer = 2
 collision_mask = 11
 axis_lock_angular_x = true
@@ -32,17 +121,46 @@ script = ExtResource("1_4spwj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
-shape = SubResource("CapsuleShape3D_6l4ou")
+shape = SubResource("CylinderShape3D_yxxuy")
 
 [node name="CollisionShapeVisualization" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
 mesh = SubResource("CapsuleMesh_qya11")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
-mesh = SubResource("CapsuleMesh_tvcx7")
-
 [node name="BTPlayer" type="BTPlayer" parent="."]
+behavior_tree = SubResource("BehaviorTree_8c20v")
 blackboard_plan = SubResource("BlackboardPlan_k6pf5")
+unique_name_in_owner = true
+
+[node name="Geometry" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26257, 0)
+mesh = SubResource("CapsuleMesh_tvcx7")
+skeleton = NodePath("../..")
+
+[node name="Head" type="MeshInstance3D" parent="Geometry"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.00144658, 1.40899, -0.095551)
+mesh = SubResource("SphereMesh_j5fex")
+
+[node name="Nose" type="MeshInstance3D" parent="Geometry"]
+transform = Transform3D(-1, 5.34131e-08, 6.92083e-08, 0, 0.79165, -0.610974, -8.74228e-08, -0.610974, -0.79165, -0.0088149, 1.6621, -0.507765)
+mesh = SubResource("SphereMesh_4wlqi")
+
+[node name="EyeL" type="MeshInstance3D" parent="Geometry"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.115786, 1.70289, -0.367307)
+mesh = SubResource("SphereMesh_tsdu5")
+
+[node name="EyeR" type="MeshInstance3D" parent="Geometry"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.114082, 1.70289, -0.37303)
+mesh = SubResource("SphereMesh_tsdu5")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0910659)
+amount = 4
+speed_scale = 2.0
+process_material = SubResource("ParticleProcessMaterial_d07ft")
+draw_pass_1 = SubResource("SphereMesh_ay2up")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

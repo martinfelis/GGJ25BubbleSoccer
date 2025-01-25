@@ -19,7 +19,7 @@ tonemap_mode = 2
 glow_enabled = true
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_effto"]
-bounce = 0.1
+bounce = 0.7
 absorbent = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b2aks"]
@@ -35,7 +35,7 @@ material = SubResource("StandardMaterial3D_5rx0d")
 size = Vector3(50, 1, 25)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_durat"]
-size = Vector3(50, 30, 1)
+size = Vector3(50, 30, 10)
 
 [sub_resource type="BoxMesh" id="BoxMesh_p8dnh"]
 size = Vector3(52, 2, 1)
@@ -50,7 +50,7 @@ bounce = 1.0
 script = ExtResource("1_dek3o")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.556122, 0.831101, 0, -0.831101, 0.556122, 0, 14.511, 6.24063)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 14.511, 6.24063)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -80,6 +80,7 @@ skeleton = NodePath("../Ground")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.8)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Bounds/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.96389)
 shape = SubResource("BoxShape3D_durat")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Bounds/StaticBody3D"]
@@ -90,6 +91,7 @@ mesh = SubResource("BoxMesh_p8dnh")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.8)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Bounds/StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.59394)
 shape = SubResource("BoxShape3D_durat")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Bounds/StaticBody3D2"]
@@ -100,6 +102,7 @@ mesh = SubResource("BoxMesh_p8dnh")
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 25.0796, 0, 0.169832)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Bounds/StaticBody3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.93715e-07, 0, -4.67398)
 shape = SubResource("BoxShape3D_durat")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Bounds/StaticBody3D3"]
@@ -110,6 +113,7 @@ mesh = SubResource("BoxMesh_yp5wl")
 transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, -24.9204, 0, 0.169832)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Bounds/StaticBody3D4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.59959e-07, 0, -5.75317)
 shape = SubResource("BoxShape3D_durat")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Bounds/StaticBody3D4"]
@@ -122,28 +126,8 @@ is_player_controlled = true
 
 [node name="NPCs" type="Node3D" parent="."]
 
-[node name="Player2" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.882291, 0, 0.470704, 0, 1, 0, -0.470704, 0, 0.882291, -6.24605, 0, 0.153951)
-physics_material_override = SubResource("PhysicsMaterial_2b660")
-
-[node name="Player3" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.882291, 0, 0.470704, 0, 1, 0, -0.470704, 0, 0.882291, -5.01479, 0, 2.46184)
-physics_material_override = SubResource("PhysicsMaterial_2b660")
-
-[node name="Player4" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.916726, 0, -0.399517, 0, 1, 0, 0.399517, 0, 0.916726, -7.51701, 0, -1.25143)
-physics_material_override = SubResource("PhysicsMaterial_2b660")
-
-[node name="Player5" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.916726, 0, -0.399517, 0, 1, 0, 0.399517, 0, 0.916726, -8.56206, 0, 1.14653)
-physics_material_override = SubResource("PhysicsMaterial_2b660")
-
-[node name="Player6" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.968596, 0, -0.248639, 0, 1, 0, 0.248639, 0, 0.968596, -8.10772, 0, 4.29236)
-physics_material_override = SubResource("PhysicsMaterial_2b660")
-
-[node name="Player7" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.968596, 0, -0.248639, 0, 1, 0, 0.248639, 0, 0.968596, -8.7581, 0, 6.826)
+[node name="NPC1" parent="NPCs" instance=ExtResource("2_aa43i")]
+transform = Transform3D(0.882291, 0, 0.470704, 0, 1, 0, -0.470704, 0, 0.882291, -13.8538, 4.62931, 0.153951)
 physics_material_override = SubResource("PhysicsMaterial_2b660")
 
 [node name="Ball" parent="." instance=ExtResource("4_iix87")]

@@ -1,0 +1,32 @@
+[gd_resource type="BehaviorTree" load_steps=10 format=3 uid="uid://cf3rlm1rjpsvi"]
+
+[ext_resource type="Script" path="res://ai/tasks/find_closest_ball_location.gd" id="1_kxx8v"]
+[ext_resource type="Script" path="res://ai/tasks/move_to_target_location.gd" id="2_fs37m"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_o815l"]
+
+[sub_resource type="BTAction" id="BTAction_4qfvo"]
+script = ExtResource("1_kxx8v")
+
+[sub_resource type="BTAction" id="BTAction_kaasl"]
+script = ExtResource("2_fs37m")
+steering_desired_distance = 1.0
+
+[sub_resource type="BTAction" id="BTAction_usv31"]
+script = ExtResource("1_kxx8v")
+
+[sub_resource type="BTParallel" id="BTParallel_6l01j"]
+num_successes_required = 2
+num_failures_required = 2
+children = [SubResource("BTAction_4qfvo"), SubResource("BTAction_kaasl"), SubResource("BTAction_usv31")]
+
+[sub_resource type="BTSequence" id="BTSequence_al58p"]
+children = [SubResource("BTParallel_6l01j")]
+
+[sub_resource type="BTRepeat" id="BTRepeat_jwilj"]
+forever = true
+children = [SubResource("BTSequence_al58p")]
+
+[resource]
+blackboard_plan = SubResource("BlackboardPlan_o815l")
+root_task = SubResource("BTRepeat_jwilj")

@@ -7,38 +7,69 @@ extends RigidBody3D
 
 # constants
 const SPEED:float = 10.0
-const ACCEL:float = 34.0
+const ACCEL:float = 24.0
 const JUMP_VELOCITY:float = 4.5
 const BOUNCE_ACCEL_TIMEOUT:float = 1
 
 # @export variables
 @export var project_velocity_on_direction:bool = true
-@export var is_player_controlled:bool = false
+@export var is_player_controlled:bool :
+	set(value):
+		is_player_controlled = value
+		
+		if is_instance_valid(bt_player):
+			bt_player.active = not is_player_controlled
+
+		if not is_player_controlled:
+			add_to_group("NPCPlayer")
+	get:
+		return is_player_controlled
+
 # public variables
+@onready var geometry: Node3D = %Geometry
+@onready var bt_player: BTPlayer = %BTPlayer
+
+var steering_target:Vector3 = Vector3.ZERO
+var is_steering_active:bool = false
+var steering_direction:Vector3 = Vector3.ZERO
 
 # private variables
 var _velocity:Vector3 = Vector3.ZERO
-var _bounce_timeout:float = 0
+var _look_angle:float = 0
+var _direction:Vector3 = Vector3.BACK
+var _look_angle_spring = SpringDamper.new(0, 4, 0.06, 0.03)
+var _is_on_floor:bool = false
+
+func _ready() -> void:
+	_look_angle = -global_transform.basis.z.signed_angle_to(Vector3.FORWARD, Vector3.UP)
+	bt_player.active = not is_player_controlled
+	if bt_player.active:
+		add_to_group("NPCPlayer")
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
+	_is_on_floor = false
+	
 	for i in range(state.get_contact_count()):
 		var normal:Vector3 = state.get_contact_local_normal(i)
+		if normal.y > 0.9:
+			_is_on_floor = true
 		# TODO: ensure we're not moving needlessliy against static geometry
 	
-	if is_player_controlled and _bounce_timeout == 0:
-		state.linear_velocity = _velocity
+	linear_velocity.x = _velocity.x
+	linear_velocity.z = _velocity.z
 
 func _handle_player_controls(delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	_direction = Vector3(input_dir.x, 0, input_dir.y).normalized()
 
+func calc_desired_velocity(delta:float) -> void:
 	var previous_speed:float = _velocity.length()
 	
-	if direction:
-		_velocity.x = _velocity.x + direction.x * ACCEL * delta
-		_velocity.z = _velocity.z + direction.z * ACCEL * delta
+	if _direction and _is_on_floor:
+		_velocity.x = _velocity.x + _direction.x * ACCEL * delta
+		_velocity.z = _velocity.z + _direction.z * ACCEL * delta
 	else:
 		_velocity.x = move_toward(_velocity.x, 0, SPEED)
 		_velocity.z = move_toward(_velocity.z, 0, SPEED)
@@ -47,21 +78,51 @@ func _handle_player_controls(delta: float) -> void:
 	if current_speed > SPEED:
 		_velocity = _velocity.normalized() * previous_speed
 	
-	if direction and project_velocity_on_direction:
-		_velocity = direction.normalized() * _velocity.length()
+	if _direction and project_velocity_on_direction:
+		_velocity = _direction.normalized() * _velocity.length()
+
+func update_look_direction(delta:float) -> void:
+	var planar_direction = Vector3(_direction.x, 0, _direction.y)
+	var planar_velocity = Vector3(_velocity.x, 0, _velocity.z)
+	
+	var current_look_angle = _look_angle
+	var target_look_angle = _look_angle
+	
+	if planar_velocity:
+		target_look_angle = -planar_velocity.signed_angle_to(Vector3.FORWARD, Vector3.UP)
+	elif planar_direction:
+		target_look_angle = -planar_direction.signed_angle_to(Vector3.FORWARD, Vector3.UP)
+
+	if target_look_angle - current_look_angle > PI:
+		current_look_angle = current_look_angle + 2 * PI
+	elif current_look_angle - target_look_angle > PI:
+		current_look_angle = current_look_angle - 2 * PI
+
+	if not is_player_controlled:
+		DebugDraw2D.set_text("is_steering_active", str(is_steering_active))
+
+	_look_angle = _look_angle_spring.calc(current_look_angle, target_look_angle, delta)
 
 func _physics_process(delta: float) -> void:
-	DebugDraw2D.set_text(name + " bounce timeout:", _bounce_timeout)
-
-	if _bounce_timeout > 0:
-		_bounce_timeout = _bounce_timeout - delta
-		_bounce_timeout = max(0, _bounce_timeout)
-		return
+	DebugDraw2D.set_text(name + ".is_steering_active", str(is_steering_active))
+	DebugDraw2D.set_text(name + "._is_on_floor", str(_is_on_floor))
 
 	_velocity = linear_velocity
 
 	if is_player_controlled:
 		_handle_player_controls(delta)
+	elif is_steering_active:
+		_direction = Vector3(steering_target.x - global_position.x, 0, steering_target.z - global_position.z)
+		if _direction:
+			_direction = _direction.normalized()
+	else:
+		_direction = Vector3.ZERO
+	
+	calc_desired_velocity(delta)
+	
+	update_look_direction(delta)
+	
+	basis = Basis.from_euler(Vector3(0, _look_angle, 0))
 
 func _on_body_entered(body: Node) -> void:
 	var other_soccer_player:SoccerPlayer = body as SoccerPlayer

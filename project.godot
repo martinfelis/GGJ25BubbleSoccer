@@ -18,6 +18,8 @@ config/icon="res://icon.svg"
 [global_group]
 
 SoccerPlayer="Contains all soccer player objects, including player controlled players."
+Ball=""
+NPCPlayer=""
 
 [layer_names]
 

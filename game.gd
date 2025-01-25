@@ -11,7 +11,7 @@ func _ready() -> void:
 	_camera_offset = camera_3d.global_position
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	for soccer_player:SoccerPlayer in get_tree().get_nodes_in_group("SoccerPlayer"):
 		# TODO: extend for multiple player controlled soccer players
 		if soccer_player.is_player_controlled:
