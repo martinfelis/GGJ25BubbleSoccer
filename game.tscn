@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cnco7afdlh24l"]
+[gd_scene load_steps=15 format=3 uid="uid://cnco7afdlh24l"]
 
 [ext_resource type="Script" path="res://entities/player.gd" id="1_3qnxg"]
 [ext_resource type="Texture2D" uid="uid://c8a082ga1spjj" path="res://assets/soccer_field.png" id="1_sa4vv"]
@@ -15,6 +15,10 @@ background_mode = 2
 sky = SubResource("Sky_tkswt")
 tonemap_mode = 2
 glow_enabled = true
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_effto"]
+bounce = 1.0
+absorbent = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b2aks"]
 size = Vector3(50, 1, 25)
@@ -60,6 +64,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
 [node name="CollisionBody" type="StaticBody3D" parent="Ground"]
 collision_mask = 3
+physics_material_override = SubResource("PhysicsMaterial_effto")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/CollisionBody"]
 shape = SubResource("BoxShape3D_b2aks")
