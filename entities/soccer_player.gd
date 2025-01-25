@@ -49,14 +49,35 @@ func _ready() -> void:
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	_is_on_floor = false
 	
+	var planar_velocity = Vector3(_velocity.x, 0, _velocity.z)
+	var contact_projected_planar_velocity:Vector3 = planar_velocity
+	
 	for i in range(state.get_contact_count()):
-		var normal:Vector3 = state.get_contact_local_normal(i)
+		var normal:Vector3 = global_basis.transposed() * state.get_contact_local_normal(i)
 		if normal.y > 0.9:
 			_is_on_floor = true
-		# TODO: ensure we're not moving needlessliy against static geometry
+			continue
+		
+		var contact_node:Node3D = state.get_contact_collider_object(i) as Node3D
+		if not contact_node:
+			continue
+
+		if is_player_controlled:
+			print (normal)
+
+		if contact_projected_planar_velocity.length() < 0.01:
+			contact_projected_planar_velocity = Vector3.ZERO
+			break
+
+		var velocity_projection:float = contact_projected_planar_velocity.dot(normal)
+		if contact_node.is_in_group("Bound") and contact_projected_planar_velocity and velocity_projection < 0:
+			contact_projected_planar_velocity -= velocity_projection * normal
 	
-	linear_velocity.x = _velocity.x
-	linear_velocity.z = _velocity.z
+	if is_player_controlled and contact_projected_planar_velocity != planar_velocity:
+		print ("planar_vel_correction: %s" % (contact_projected_planar_velocity - planar_velocity))
+	
+	linear_velocity.x = contact_projected_planar_velocity.x
+	linear_velocity.z = contact_projected_planar_velocity.z
 
 func _handle_player_controls(delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
