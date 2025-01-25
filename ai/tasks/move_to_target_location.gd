@@ -2,9 +2,9 @@ extends BTAction
 
 # constants
 const target_location_var:StringName = &"target_location"
+const steering_desired_distance:float = 1.2
 
 # @export variables
-@export var steering_desired_distance:float = 1
 
 func _tick(_delta: float) -> Status:
 	var agent_soccer_player:SoccerPlayer = agent as SoccerPlayer
@@ -14,6 +14,8 @@ func _tick(_delta: float) -> Status:
 		return FAILURE
 	
 	var target_location:Vector3 = blackboard.get_var(target_location_var)
+#	var target_distance = (agent_soccer_player.global_position - target_location).length()
+
 	if (agent_soccer_player.global_position - target_location).length() < steering_desired_distance:
 		agent_soccer_player.steering_target = agent_soccer_player.global_position
 		agent_soccer_player.is_steering_active = false

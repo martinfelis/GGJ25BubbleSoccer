@@ -1,6 +1,6 @@
 extends BTAction
 
-const target_location_var:StringName = &"target_location"
+const ball_location_var:StringName = &"ball_location"
 
 func _tick(_delta: float) -> Status:
 	var ball_objects:Array = agent.get_tree().get_nodes_in_group("Ball")
@@ -16,6 +16,6 @@ func _tick(_delta: float) -> Status:
 			closest_distance = distance
 			closest_index = i
 	
-	blackboard.set_var(target_location_var, ball_objects[closest_index].global_position)
+	blackboard.set_var(ball_location_var, ball_objects[closest_index].global_position)
 	
 	return SUCCESS

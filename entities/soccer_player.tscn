@@ -1,36 +1,30 @@
-[gd_scene load_steps=30 format=3 uid="uid://bkhlgdnuwnhx5"]
+[gd_scene load_steps=31 format=3 uid="uid://bkhlgdnuwnhx5"]
 
 [ext_resource type="Script" path="res://entities/soccer_player.gd" id="1_4spwj"]
-[ext_resource type="Script" path="res://ai/tasks/find_closest_ball_location.gd" id="2_ejshh"]
+[ext_resource type="PhysicsMaterial" uid="uid://caeqvv37c4dlu" path="res://utils/player_physics_material.tres" id="1_wr7pm"]
+[ext_resource type="Script" path="res://ai/tasks/find_ball_attack_location.gd" id="2_0ncog"]
 [ext_resource type="Script" path="res://ai/tasks/move_to_target_location.gd" id="3_gnlfn"]
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a1iwp"]
-friction = 0.0
-bounce = 1.0
+[ext_resource type="Material" uid="uid://bfadl7kna8bws" path="res://materials/team_red_material.tres" id="4_ohhf6"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_yxxuy"]
-height = 1.39568
-radius = 1.0
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_qya11"]
+height = 1.4
 radius = 1.0
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_o815l"]
 
-[sub_resource type="BTAction" id="BTAction_4qfvo"]
-script = ExtResource("2_ejshh")
+[sub_resource type="BTAction" id="BTAction_trady"]
+script = ExtResource("2_0ncog")
 
 [sub_resource type="BTAction" id="BTAction_kaasl"]
 script = ExtResource("3_gnlfn")
-steering_desired_distance = 1.0
 
-[sub_resource type="BTAction" id="BTAction_usv31"]
-script = ExtResource("2_ejshh")
+[sub_resource type="BTAction" id="BTAction_tkt4o"]
+script = ExtResource("2_0ncog")
 
 [sub_resource type="BTParallel" id="BTParallel_6l01j"]
 num_successes_required = 2
 num_failures_required = 2
-children = [SubResource("BTAction_4qfvo"), SubResource("BTAction_kaasl"), SubResource("BTAction_usv31")]
+children = [SubResource("BTAction_trady"), SubResource("BTAction_kaasl"), SubResource("BTAction_tkt4o")]
 
 [sub_resource type="BTSequence" id="BTSequence_al58p"]
 children = [SubResource("BTParallel_6l01j")]
@@ -45,7 +39,13 @@ root_task = SubResource("BTRepeat_jwilj")
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_k6pf5"]
 
+[sub_resource type="SphereMesh" id="SphereMesh_4c8m0"]
+material = ExtResource("4_ohhf6")
+radius = 1.1
+height = 2.0
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_tvcx7"]
+material = ExtResource("4_ohhf6")
 radius = 0.4
 height = 1.5
 
@@ -108,24 +108,21 @@ radial_segments = 8
 rings = 3
 
 [node name="SoccerPlayer" type="RigidBody3D" groups=["SoccerPlayer"]]
+transform = Transform3D(1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, 1, 0, 0, 0)
 collision_layer = 2
 collision_mask = 11
 axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
-physics_material_override = SubResource("PhysicsMaterial_a1iwp")
+physics_material_override = ExtResource("1_wr7pm")
 center_of_mass_mode = 1
 contact_monitor = true
-max_contacts_reported = 2
+max_contacts_reported = 3
 script = ExtResource("1_4spwj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.71, 0)
 shape = SubResource("CylinderShape3D_yxxuy")
-
-[node name="CollisionShapeVisualization" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
-mesh = SubResource("CapsuleMesh_qya11")
 
 [node name="BTPlayer" type="BTPlayer" parent="."]
 behavior_tree = SubResource("BehaviorTree_8c20v")
@@ -135,10 +132,19 @@ unique_name_in_owner = true
 [node name="Geometry" type="Node3D" parent="."]
 unique_name_in_owner = true
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry"]
+[node name="BubbleBody" type="MeshInstance3D" parent="Geometry"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+mesh = SubResource("SphereMesh_4c8m0")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("4_ohhf6")
+
+[node name="Hair" type="MeshInstance3D" parent="Geometry"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26257, 0)
 mesh = SubResource("CapsuleMesh_tvcx7")
 skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("4_ohhf6")
 
 [node name="Head" type="MeshInstance3D" parent="Geometry"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.00144658, 1.40899, -0.095551)
