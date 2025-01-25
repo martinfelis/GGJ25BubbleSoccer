@@ -108,7 +108,7 @@ radial_segments = 8
 rings = 3
 
 [node name="SoccerPlayer" type="RigidBody3D" groups=["SoccerPlayer"]]
-transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0, 0, 0)
+transform = Transform3D(1, 0, -4.25087e-08, 0, 1, 0, 4.25087e-08, 0, 1, 0, 0, 0)
 collision_layer = 2
 collision_mask = 11
 axis_lock_angular_x = true

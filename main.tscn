@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://sms2nfcnmjx4"]
+[gd_scene load_steps=5 format=3 uid="uid://sms2nfcnmjx4"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_8kd4w"]
+[ext_resource type="Theme" uid="uid://b45dd24ves1jw" path="res://ui/bubble_soccer_theme.tres" id="1_j68q3"]
 [ext_resource type="PackedScene" uid="uid://cnco7afdlh24l" path="res://game.tscn" id="1_l3glw"]
 [ext_resource type="Script" path="res://ui/debug_ui.gd" id="2_bqpn5"]
 
@@ -59,41 +60,45 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
+theme = ExtResource("1_j68q3")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameUI"]
+[node name="MarginContainer" type="MarginContainer" parent="GameUI"]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -38.5
-offset_right = 38.5
-offset_bottom = 50.0
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 52.0
 grow_horizontal = 2
+theme_override_constants/margin_top = 12
 
-[node name="Score" type="Label" parent="GameUI/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameUI/MarginContainer"]
 layout_mode = 2
-text = "SomeTitle"
+
+[node name="Score" type="Label" parent="GameUI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Score"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GameUI/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="GameUI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="BlueScoreLabel" type="Label" parent="GameUI/VBoxContainer/HBoxContainer"]
+[node name="BlueScoreLabel" type="Label" parent="GameUI/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.243137, 1, 1)
+theme_override_font_sizes/font_size = 50
 text = "0"
 horizontal_alignment = 1
 
-[node name="Separator" type="Label" parent="GameUI/VBoxContainer/HBoxContainer"]
+[node name="Separator" type="Label" parent="GameUI/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = ":"
 horizontal_alignment = 1
 
-[node name="RedScoreLabel" type="Label" parent="GameUI/VBoxContainer/HBoxContainer"]
+[node name="RedScoreLabel" type="Label" parent="GameUI/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.929412, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
 text = "0"
 horizontal_alignment = 1

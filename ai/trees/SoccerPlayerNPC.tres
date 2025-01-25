@@ -1,12 +1,9 @@
-[gd_resource type="BehaviorTree" load_steps=10 format=3 uid="uid://cf3rlm1rjpsvi"]
+[gd_resource type="BehaviorTree" load_steps=9 format=3 uid="uid://cf3rlm1rjpsvi"]
 
 [ext_resource type="Script" path="res://ai/tasks/find_ball_attack_location.gd" id="1_0iuqv"]
 [ext_resource type="Script" path="res://ai/tasks/move_to_target_location.gd" id="2_fs37m"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_o815l"]
-
-[sub_resource type="BTAction" id="BTAction_loo8o"]
-script = ExtResource("1_0iuqv")
 
 [sub_resource type="BTAction" id="BTAction_kaasl"]
 script = ExtResource("2_fs37m")
@@ -17,7 +14,7 @@ script = ExtResource("1_0iuqv")
 [sub_resource type="BTParallel" id="BTParallel_6l01j"]
 num_successes_required = 2
 num_failures_required = 2
-children = [SubResource("BTAction_loo8o"), SubResource("BTAction_kaasl"), SubResource("BTAction_yulh3")]
+children = [SubResource("BTAction_kaasl"), SubResource("BTAction_yulh3")]
 
 [sub_resource type="BTSequence" id="BTSequence_al58p"]
 children = [SubResource("BTParallel_6l01j")]

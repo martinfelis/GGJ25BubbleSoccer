@@ -59,6 +59,8 @@ func _ready() -> void:
 	if not is_player_controlled:
 		bt_player.active = true
 		add_to_group("NPCPlayer")
+	else:
+		bt_player.active = false
 
 func update_team():
 	if not is_instance_valid(bubble_body) or not is_instance_valid(hair):

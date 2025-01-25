@@ -7,8 +7,10 @@
 radius = 0.25
 
 [sub_resource type="SphereMesh" id="SphereMesh_0h1gm"]
-radius = 0.25
-height = 0.5
+radius = 0.3
+height = 0.6
+radial_segments = 16
+rings = 16
 
 [node name="Ball" type="RigidBody3D" groups=["Ball"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.256, 0)

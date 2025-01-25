@@ -111,29 +111,19 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -26, 2
 team_name = 1
 
 [node name="Player" parent="." instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.938056, 0, 0.346485, 0, 1, 0, -0.346485, 0, 0.938056, 1.63456, -2.38419e-07, -1.97999)
+transform = Transform3D(0.903766, 0, 0.428026, 0, 1, 0, -0.428026, 0, 0.903766, 1.63456, -2.38419e-07, -1.97999)
 team_name = 1
 is_player_controlled = true
 
 [node name="NPCs" type="Node3D" parent="."]
 
 [node name="NPC1" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.77114, 0, -0.636665, 0, 1, 0, 0.636665, 0, 0.77114, -4.37086, 4.62931, -7.33538)
+transform = Transform3D(0.771159, 0, 0.636643, 0, 1, 0, -0.636643, 0, 0.771159, -4.37086, 4.62931, -7.33538)
 physics_material_override = SubResource("PhysicsMaterial_2b660")
-
-[node name="NPC2" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.77114, 0, -0.636665, 0, 1, 0, 0.636665, 0, 0.77114, 1.22615, 4.62931, -8.88948)
-physics_material_override = SubResource("PhysicsMaterial_2b660")
-
-[node name="NPC3" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.77114, 0, -0.636665, 0, 1, 0, 0.636665, 0, 0.77114, -16.4497, 4.62931, -3.04118)
-physics_material_override = SubResource("PhysicsMaterial_2b660")
-team_name = 1
 
 [node name="NPC4" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.77114, 0, -0.636665, 0, 1, 0, 0.636665, 0, 0.77114, -5.11707, 4.62931, -12.0869)
+transform = Transform3D(0.771159, 0, 0.636643, 0, 1, 0, -0.636643, 0, 0.771159, -5.11707, 4.62931, -12.0869)
 physics_material_override = SubResource("PhysicsMaterial_2b660")
-team_name = 1
 
 [node name="Balls" type="Node3D" parent="."]
 

@@ -41,7 +41,7 @@ func on_ball_reset(ball:Ball) -> void:
 	ball.linear_velocity = Vector3(randf() -0.5, 2, randf() - 0.5) * 5
 
 func on_goal_ball_detected(goal:Goal, ball:Ball):
-	if goal.team_name == goal.TeamName.RED:
+	if goal.team_name == goal.TeamName.BLUE:
 		red_score += 1
 	else:
 		blue_score += 1

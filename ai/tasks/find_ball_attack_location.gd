@@ -51,5 +51,6 @@ func _tick(_delta: float) -> Status:
 	var target_location = predicted_ball_location + (predicted_ball_location - ball.global_position).normalized() * 2
 	blackboard.set_var(target_location_var, target_location)
 	DebugDraw3D.draw_arrow(agent.global_position, target_location, Color.ORANGE, 0.1, true)
-		
+	DebugDraw3D.draw_arrow(agent.global_position, goal.global_position, Color.GOLDENROD, 0.1, true)	
+	
 	return SUCCESS
