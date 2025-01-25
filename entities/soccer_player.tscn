@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3 uid="uid://bkhlgdnuwnhx5"]
+
+[ext_resource type="Script" path="res://entities/soccer_player.gd" id="1_4spwj"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a1iwp"]
+friction = 0.3
+bounce = 1.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6l4ou"]
+height = 1.2
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_qya11"]
+height = 1.2
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_tvcx7"]
+radius = 0.25
+height = 1.5
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_k6pf5"]
+
+[node name="Player" type="RigidBody3D" groups=["SoccerPlayer"]]
+collision_layer = 2
+collision_mask = 11
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+physics_material_override = SubResource("PhysicsMaterial_a1iwp")
+center_of_mass_mode = 1
+contact_monitor = true
+max_contacts_reported = 2
+script = ExtResource("1_4spwj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+shape = SubResource("CapsuleShape3D_6l4ou")
+
+[node name="CollisionShapeVisualization" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+mesh = SubResource("CapsuleMesh_qya11")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("CapsuleMesh_tvcx7")
+
+[node name="BTPlayer" type="BTPlayer" parent="."]
+blackboard_plan = SubResource("BlackboardPlan_k6pf5")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
