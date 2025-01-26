@@ -71,6 +71,9 @@ func spawn_balls():
 		var ball:Ball = BALL_SCENE.instantiate()
 		balls.add_child(ball)
 		on_ball_reset(ball)
+	
+	for ball:Ball in get_tree().get_nodes_in_group("Ball"):
+		ball.connect("ball_reset", on_ball_reset)
 
 func assign_player_controls():
 	var num_players_assigned:int = 0

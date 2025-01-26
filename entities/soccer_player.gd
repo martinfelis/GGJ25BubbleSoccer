@@ -14,7 +14,7 @@ enum TeamName {RED, BLUE}
 		return team_name
 
 # constants
-const SPEED:float = 20.0
+const SPEED:float = 15.0
 const SPEED_WITH_BALL:float = 10.0
 const ACCEL:float = 40.0
 const SHOOT_SPEED:float = 15.0
@@ -93,6 +93,8 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	debug_draw_contact_points.resize(state.get_contact_count())
 	debug_draw_contact_normals.resize(state.get_contact_count())
 	
+	var summed_impulse:Vector3 = Vector3.ZERO
+	
 	for i in range(state.get_contact_count()):
 		debug_draw_contact_points[i] = state.get_contact_collider_position(i)
 		debug_draw_contact_normals[i] = state.get_contact_local_normal(i)
@@ -100,8 +102,20 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		if normal.y > 0.9:
 			_is_on_floor = true
 			continue
+
+		var contact_impulse = state.get_contact_local_velocity_at_position(i)
+		# if contact_impulse and is_player_controlled:
+			# print (contact_impulse)
+			# DebugDraw3D.draw_arrow(global_position + Vector3.UP * 0.5, global_position + contact_impulse * 5 + Vector3.UP * 0.5, Color.FUCHSIA, 0.2, true, 2)
+		
+		summed_impulse +=  state.get_contact_local_velocity_at_position(i)
 	
-	DebugDraw3D.draw_points(debug_draw_contact_points)
+	if summed_impulse and summed_impulse.dot(linear_velocity) > 0 and connected_ball:
+		connected_ball.connected_player = null
+		connected_ball.linear_velocity += summed_impulse * 0.5
+		connected_ball = null		
+	
+	#DebugDraw3D.draw_arrow(global_position + Vector3.UP * 0.5, global_position + summed_impulse * 5 + Vector3.UP * 0.5, Color.FUCHSIA, 0.2, true, 2)
 	
 	var planar_speed:float = 0
 	if planar_velocity:

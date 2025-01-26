@@ -19,7 +19,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_8kd4w")
-enable_debug_draw = true
 
 [node name="GameView" type="SubViewportContainer" parent="."]
 layout_mode = 1

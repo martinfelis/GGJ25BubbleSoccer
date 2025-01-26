@@ -15,6 +15,9 @@ func _ready():
 	if not OS.is_debug_build():
 		enable_debug_draw = false
 		debug_ui.visible = false
+	
+	if not enable_debug_draw:
+		debug_ui.visible = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
