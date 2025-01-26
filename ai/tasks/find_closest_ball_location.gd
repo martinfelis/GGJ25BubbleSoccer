@@ -20,7 +20,7 @@ func _tick(_delta: float) -> Status:
 		var ball:Ball = ball_objects[i] as Ball
 		
 		# Ignore balls that are connected to team members
-		if ball.connected_player and ball.connected_player.team_name == agent_soccer_player.team_name:
+		if ball.is_owned_by_team(agent_soccer_player.team_name):
 			continue
 		
 		if agent_soccer_player.team_name == SoccerPlayer.TeamName.RED:

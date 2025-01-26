@@ -1,4 +1,4 @@
-@tool
+#@tool
 class_name SoccerPlayer
 extends RigidBody3D
 
@@ -16,8 +16,8 @@ enum TeamName {RED, BLUE}
 # constants
 const SPEED:float = 20.0
 const SPEED_WITH_BALL:float = 10.0
-const ACCEL:float = 34.0
-const SHOOT_SPEED:float = 10.0
+const ACCEL:float = 40.0
+const SHOOT_SPEED:float = 15.0
 const JUMP_VELOCITY:float = 4.5
 const BOUNCE_ACCEL_TIMEOUT:float = 1
 const BLUE_MATERIAL:Material = preload("res://materials/team_blue_material.tres")
@@ -59,6 +59,9 @@ var _is_on_floor:bool = false
 var _planar_steering_direction:Vector3 = Vector3.BACK * 0.01
 
 func _ready() -> void:
+	# Workaround for https://github.com/godotengine/godot/issues/74993
+	InputMap.load_from_project_settings()
+	
 	_look_angle = -global_transform.basis.z.signed_angle_to(Vector3.FORWARD, Vector3.UP)
 	
 	update_team()
@@ -180,11 +183,6 @@ func _physics_process(delta: float) -> void:
 	
 	if connected_ball:
 		connected_ball.global_position = global_position - global_basis.z * 1.3 + Vector3.UP * 0.3
-
-func _on_body_entered(body: Node) -> void:
-	var other_soccer_player:SoccerPlayer = body as SoccerPlayer
-	if not other_soccer_player:
-		return
 
 func _on_ball_detection_area_body_entered(body: Node3D) -> void:
 		var ball:Ball = body as Ball

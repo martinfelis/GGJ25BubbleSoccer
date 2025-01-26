@@ -3,19 +3,19 @@
 [ext_resource type="PhysicsMaterial" uid="uid://8r1lgpu5mfio" path="res://utils/border_physics_material.tres" id="1_kmy80"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_durat"]
-size = Vector3(80, 30, 10)
+size = Vector3(80, 30, 30)
 
 [sub_resource type="BoxMesh" id="BoxMesh_p8dnh"]
-size = Vector3(80, 30, 10)
+size = Vector3(80, 30, 30)
 
 [node name="StaticBody3D" type="StaticBody3D" groups=["Bound"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.8)
 physics_material_override = ExtResource("1_kmy80")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.96389)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0)
 shape = SubResource("BoxShape3D_durat")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.98297)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0)
 mesh = SubResource("BoxMesh_p8dnh")

@@ -59,7 +59,7 @@ environment = SubResource("Environment_o6hid")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.538418, 0.842678, 0, -0.842678, 0.538418, 0, 12.1579, 7.08105)
+transform = Transform3D(1, 0, 0, 0, 0.538418, 0.842678, 0, -0.842678, 0.538418, 0, 14.9591, 15.1014)
 
 [node name="Level" type="Node3D" parent="."]
 unique_name_in_owner = true
@@ -82,16 +82,16 @@ skeleton = NodePath("")
 [node name="Bounds" type="Node3D" parent="Level"]
 
 [node name="StaticBody3D" parent="Level/Bounds" instance=ExtResource("4_geypk")]
-transform = Transform3D(1, 0, 0, 0, 0.987688, 0.156434, 0, -0.156434, 0.987688, 0, 7, -25)
+transform = Transform3D(1, 0, 0, 0, 0.984807, 0.173648, 0, -0.173648, 0.984807, 0, 0, -35)
 
 [node name="StaticBody3D2" parent="Level/Bounds" instance=ExtResource("4_geypk")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 7, 25)
+transform = Transform3D(-1, 1.51808e-08, -8.60946e-08, 0, 0.984808, 0.173648, 8.74228e-08, 0.173648, -0.984808, 0, 0, 35)
 
 [node name="StaticBody3D3" parent="Level/Bounds" instance=ExtResource("4_geypk")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -36, 7, 1)
+transform = Transform3D(-4.37114e-08, -0.173648, 0.984808, 0, 0.984808, 0.173648, -1, 7.5904e-09, -4.30473e-08, -48, 0, 1)
 
 [node name="StaticBody3D4" parent="Level/Bounds" instance=ExtResource("4_geypk")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 35, 7, 1)
+transform = Transform3D(-4.37114e-08, 0.173648, -0.984808, 0, 0.984808, 0.173648, 1, 7.5904e-09, -4.30473e-08, 48, 0, 1)
 
 [node name="GameFieldArea" type="Area3D" parent="Level"]
 collision_mask = 8
@@ -107,31 +107,32 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 2, 0)
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -26, 2, 0)
 team_name = 1
 
-[node name="Player" parent="." instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.770941, 0, 0.636907, 0, 1, 0, -0.636907, 0, 0.770941, 1.56998, -1.19209e-06, 4.64097)
-team_name = 1
-is_player_controlled = true
+[node name="Players" type="Node3D" parent="."]
+unique_name_in_owner = true
 
-[node name="NPCs" type="Node3D" parent="."]
-
-[node name="SoccerPlayer7" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.771158, 0, 0.636644, 0, 1, 0, -0.636644, 0, 0.771158, 14.8729, 0, -4.94543)
+[node name="Player" parent="Players" instance=ExtResource("2_aa43i")]
+transform = Transform3D(0.770924, 0, 0.636927, 0, 1, 0, -0.636927, 0, 0.770924, 1.56998, -1.19209e-06, 4.64097)
 team_name = 1
 
-[node name="SoccerPlayer8" parent="NPCs" instance=ExtResource("2_aa43i")]
+[node name="SoccerPlayer7" parent="Players" instance=ExtResource("2_aa43i")]
+transform = Transform3D(0.771158, 0, 0.636644, 0, 1, 0, -0.636644, 0, 0.771158, 15.164, 0, -7.6846)
+team_name = 1
+
+[node name="SoccerPlayer8" parent="Players" instance=ExtResource("2_aa43i")]
 transform = Transform3D(0.771158, 0, -0.636644, 0, 1, 0, 0.636644, 0, 0.771158, 8.70809, 0, 7.07675)
 team_name = 1
 
-[node name="SoccerPlayer9" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.77391, 0, 0.633295, 0, 1, 0, -0.633295, 0, 0.77391, -6.92624, 1.90735e-06, 6.92673)
+[node name="SoccerPlayer9" parent="Players" instance=ExtResource("2_aa43i")]
+transform = Transform3D(0.771158, 0, 0.636644, 0, 1, 0, -0.636644, 0, 0.771158, -6.92624, 1.90735e-06, 6.92673)
 
-[node name="SoccerPlayer10" parent="NPCs" instance=ExtResource("2_aa43i")]
-transform = Transform3D(0.770267, 0, -0.637722, 0, 1, 0, 0.637722, 0, 0.770267, -0.850314, 0, -5.09894)
+[node name="SoccerPlayer10" parent="Players" instance=ExtResource("2_aa43i")]
+transform = Transform3D(0.771158, 0, -0.636644, 0, 1, 0, 0.636644, 0, 0.771158, -0.850314, 0, -5.09894)
 
-[node name="SoccerPlayer11" parent="NPCs" instance=ExtResource("2_aa43i")]
+[node name="SoccerPlayer11" parent="Players" instance=ExtResource("2_aa43i")]
 transform = Transform3D(0.771158, 0, 0.636644, 0, 1, 0, -0.636644, 0, 0.771158, -10.9856, 0, -6.18296)
 
 [node name="Balls" type="Node3D" parent="."]
+unique_name_in_owner = true
 
 [node name="Ball" parent="Balls" instance=ExtResource("4_iix87")]
 physics_material_override = SubResource("PhysicsMaterial_bdwla")

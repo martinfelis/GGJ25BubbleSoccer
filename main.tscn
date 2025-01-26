@@ -1,9 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://sms2nfcnmjx4"]
+[gd_scene load_steps=11 format=3 uid="uid://sms2nfcnmjx4"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_8kd4w"]
 [ext_resource type="Theme" uid="uid://b45dd24ves1jw" path="res://ui/bubble_soccer_theme.tres" id="1_j68q3"]
 [ext_resource type="PackedScene" uid="uid://cnco7afdlh24l" path="res://game.tscn" id="1_l3glw"]
 [ext_resource type="Script" path="res://ui/debug_ui.gd" id="2_bqpn5"]
+[ext_resource type="Script" path="res://ui/menu_state_machine.gd" id="3_debml"]
+[ext_resource type="ButtonGroup" uid="uid://bys41rc36f8k5" path="res://ui/vs_coop_button_group.tres" id="4_5bd0u"]
+[ext_resource type="Script" path="res://ui/main_menu_ui.gd" id="4_gbv0i"]
+[ext_resource type="Script" path="res://ui/menu_state.gd" id="4_yjp6s"]
+[ext_resource type="Script" path="res://ui/game_ui.gd" id="6_6333h"]
+[ext_resource type="Script" path="res://ui/pause_ui.gd" id="8_lf4ys"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -31,38 +37,34 @@ render_target_update_mode = 4
 
 [node name="Game" parent="GameView/SubViewport" instance=ExtResource("1_l3glw")]
 unique_name_in_owner = true
-process_mode = 4
 
-[node name="DebugUI" type="Control" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("2_bqpn5")
-
-[node name="BehaviorTreeView" type="BehaviorTreeView" parent="DebugUI"]
+[node name="MenuStateMachine" type="Node" parent="."]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(400, 400)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -40.0
-grow_horizontal = 0
-grow_vertical = 0
+script = ExtResource("3_debml")
+
+[node name="MainMenuState" type="Node" parent="MenuStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("4_yjp6s")
+ui_control_path = NodePath("../../MainMenuUI")
+
+[node name="GameUIState" type="Node" parent="MenuStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("4_yjp6s")
+ui_control_path = NodePath("../../GameUI")
+
+[node name="PauseUIState" type="Node" parent="MenuStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("4_yjp6s")
+ui_control_path = NodePath("../../PauseUI")
 
 [node name="GameUI" type="Panel" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
 theme = ExtResource("1_j68q3")
+script = ExtResource("6_6333h")
 
 [node name="MarginContainer" type="MarginContainer" parent="GameUI"]
 layout_mode = 1
@@ -105,7 +107,18 @@ theme_override_font_sizes/font_size = 50
 text = "0"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="MainMenuUI" type="Panel" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_j68q3")
+script = ExtResource("4_gbv0i")
+
+[node name="CenterContainer" type="CenterContainer" parent="MainMenuUI"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -113,7 +126,147 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="Panel" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenuUI/CenterContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainMenuUI/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 50
+
+[node name="GameTitleLabel" type="Label" parent="MainMenuUI/CenterContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Bubble Soccer"
+horizontal_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="MainMenuUI/CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GameOptions" type="VBoxContainer" parent="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="GameModeContainer" type="HBoxContainer" parent="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions"]
+visible = false
+layout_mode = 2
+
+[node name="CoopCheckbox" type="Button" parent="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions/GameModeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+button_group = ExtResource("4_5bd0u")
+text = "VS"
+
+[node name="VersusCheckbox" type="Button" parent="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions/GameModeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+button_group = ExtResource("4_5bd0u")
+text = "Coop"
+
+[node name="StartButton" type="Button" parent="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "STart"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_right = 20
+
+[node name="Label" type="Label" parent="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions/HBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "Team Size"
+
+[node name="TeamSizeSlider" type="HSlider" parent="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 1.0
+max_value = 8.0
+value = 4.0
+rounded = true
+
+[node name="TeamSizeLabel" type="Label" parent="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "4
+"
+horizontal_alignment = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="QuitButton" type="Button" parent="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions/MarginContainer2"]
+layout_mode = 2
+text = "Quit"
+
+[node name="PauseUI" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_j68q3")
+script = ExtResource("8_lf4ys")
+
+[node name="CenterContainer" type="CenterContainer" parent="PauseUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseUI/CenterContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PauseUI/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 16
+
+[node name="Label" type="Label" parent="PauseUI/CenterContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 58
+text = "- Paused -"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseUI/CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ResumeButton" type="Button" parent="PauseUI/CenterContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Resume
+"
+
+[node name="EndGame" type="Button" parent="PauseUI/CenterContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "End Game
+"
+
+[node name="DebugUI" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_bqpn5")
+
+[node name="BehaviorTreeView" type="BehaviorTreeView" parent="DebugUI"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 400)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -125,7 +278,29 @@ offset_top = -40.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="Label" type="Label" parent="Panel"]
+[node name="GridContainer" type="GridContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VideoOverlay" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Label" type="Label" parent="VideoOverlay"]
 layout_mode = 2
 offset_left = -501.0
 offset_top = -91.0
@@ -140,7 +315,8 @@ theme_override_constants/shadow_offset_y = 10
 theme_override_font_sizes/font_size = 70
 text = "Bubble SOccer"
 
-[node name="Label2" type="Label" parent="Panel"]
+[node name="Label2" type="Label" parent="VideoOverlay"]
+layout_mode = 0
 offset_left = -139.0
 offset_top = -15.0
 offset_right = 375.0
@@ -153,3 +329,11 @@ theme_override_constants/shadow_offset_x = 8
 theme_override_constants/shadow_offset_y = 10
 theme_override_font_sizes/font_size = 40
 text = "by fysx"
+
+[connection signal="visibility_changed" from="MainMenuUI" to="MainMenuUI" method="_on_visibility_changed"]
+[connection signal="pressed" from="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions/StartButton" to="MainMenuUI" method="_on_start_button_pressed"]
+[connection signal="value_changed" from="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions/HBoxContainer/TeamSizeSlider" to="MainMenuUI" method="_on_team_size_slider_value_changed"]
+[connection signal="pressed" from="MainMenuUI/CenterContainer/VBoxContainer/CenterContainer/GameOptions/MarginContainer2/QuitButton" to="MainMenuUI" method="_on_quit_button_pressed"]
+[connection signal="visibility_changed" from="PauseUI" to="PauseUI" method="_on_visibility_changed"]
+[connection signal="pressed" from="PauseUI/CenterContainer/VBoxContainer/VBoxContainer/ResumeButton" to="PauseUI" method="_on_resume_button_pressed"]
+[connection signal="pressed" from="PauseUI/CenterContainer/VBoxContainer/VBoxContainer/EndGame" to="PauseUI" method="_on_end_game_pressed"]

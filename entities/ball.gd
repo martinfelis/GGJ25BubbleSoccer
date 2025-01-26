@@ -28,11 +28,24 @@ func _process_reset(delta:float) -> void:
 func reset_ball():
 	ignore_timer_blue = 0
 	ignore_timer_red = 0
-	
+
+	reset_player_connection()	
+
+func reset_player_connection():
 	if connected_player:
 		connected_player.connected_ball = null
 	connected_player = null
 	
+
+func is_owned_by_team(team_name:SoccerPlayer.TeamName) -> bool:
+	if connected_player == null:
+		return false
+	
+	if connected_player and is_instance_valid(connected_player):
+		return team_name == connected_player.team_name
+	
+	reset_player_connection()
+	return false
 
 func on_leave_game_area() -> void:
 	_reset_time = BALL_RESET_TIME

@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bkhlgdnuwnhx5"]
+[gd_scene load_steps=24 format=3 uid="uid://bkhlgdnuwnhx5"]
 
 [ext_resource type="Script" path="res://entities/soccer_player.gd" id="1_4spwj"]
 [ext_resource type="PhysicsMaterial" uid="uid://caeqvv37c4dlu" path="res://utils/player_physics_material.tres" id="1_wr7pm"]
@@ -7,6 +7,9 @@
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_yxxuy"]
 height = 1.4
+radius = 1.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vpwdj"]
 radius = 1.0
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_k6pf5"]
@@ -83,7 +86,6 @@ rings = 3
 size = Vector3(1, 0.5, 1)
 
 [node name="SoccerPlayer" type="RigidBody3D" groups=["SoccerPlayer"]]
-transform = Transform3D(1, 0, -4.25087e-08, 0, 1, 0, 4.25087e-08, 0, 1, 0, 0, 0)
 collision_layer = 2
 collision_mask = 11
 axis_lock_angular_x = true
@@ -98,6 +100,10 @@ script = ExtResource("1_4spwj")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.71, 0)
 shape = SubResource("CylinderShape3D_yxxuy")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 1.12197, 0)
+shape = SubResource("SphereShape3D_vpwdj")
 
 [node name="BTPlayer" type="BTPlayer" parent="."]
 behavior_tree = ExtResource("3_bffcp")
@@ -152,6 +158,5 @@ collision_mask = 8
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65253e-08, 0.25, -1.20775)
 shape = SubResource("BoxShape3D_q2411")
 
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_entered" from="BallDetectionArea" to="." method="_on_ball_detection_area_body_entered"]
 [connection signal="body_shape_entered" from="BallDetectionArea" to="." method="_on_ball_detection_area_body_shape_entered"]
