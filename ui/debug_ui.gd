@@ -1,12 +1,7 @@
 extends Control
 
-@onready var behavior_tree_view: BehaviorTreeView = %BehaviorTreeView
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
 func update_behaviour_tree_entity_state() -> void:
+	var behavior_tree_view: BehaviorTreeView = %BehaviorTreeView
 	var npc_entities = get_tree().get_nodes_in_group("NPCPlayer")
 	if npc_entities.size() == 0:
 		return

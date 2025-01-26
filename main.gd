@@ -1,6 +1,7 @@
 extends Control
 
 @export var enable_debug_draw:bool = false
+@onready var debug_ui: Control = $DebugUI
 
 @onready var sub_viewport: SubViewport = %SubViewport
 @onready var game: Game = %Game
@@ -10,6 +11,10 @@ extends Control
 
 func _ready():
 	game.score_updated.connect(on_score_updated)
+	
+	if not OS.is_debug_build():
+		enable_debug_draw = false
+		debug_ui.visible = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:

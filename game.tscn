@@ -49,6 +49,7 @@ bounce = 1.0
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_dek3o")
+reset_balls = false
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 14.511, 6.24063)
@@ -82,16 +83,16 @@ skeleton = NodePath("")
 [node name="Bounds" type="Node3D" parent="Level"]
 
 [node name="StaticBody3D" parent="Level/Bounds" instance=ExtResource("4_geypk")]
-transform = Transform3D(1, 0, 0, 0, 0.984807, 0.173648, 0, -0.173648, 0.984807, 0, 0, -35)
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 0, -35)
 
 [node name="StaticBody3D2" parent="Level/Bounds" instance=ExtResource("4_geypk")]
-transform = Transform3D(-1, 1.51808e-08, -8.60946e-08, 0, 0.984808, 0.173648, 8.74228e-08, 0.173648, -0.984808, 0, 0, 35)
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 35)
 
 [node name="StaticBody3D3" parent="Level/Bounds" instance=ExtResource("4_geypk")]
-transform = Transform3D(-4.37114e-08, -0.173648, 0.984808, 0, 0.984808, 0.173648, -1, 7.5904e-09, -4.30473e-08, -48, 0, 1)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -48, 0, 1)
 
 [node name="StaticBody3D4" parent="Level/Bounds" instance=ExtResource("4_geypk")]
-transform = Transform3D(-4.37114e-08, 0.173648, -0.984808, 0, 0.984808, 0.173648, 1, 7.5904e-09, -4.30473e-08, 48, 0, 1)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 48, 0, 1)
 
 [node name="GameFieldArea" type="Area3D" parent="Level"]
 collision_mask = 8

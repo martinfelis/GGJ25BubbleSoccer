@@ -57,18 +57,18 @@ script = ExtResource("2_4rs0y")
 custom_name = "Dribbling"
 children = [SubResource("BTAction_3lekf"), SubResource("BTParallel_7l44m"), SubResource("BTAction_7s4et")]
 
-[sub_resource type="BTAction" id="BTAction_bfjcr"]
+[sub_resource type="BTAction" id="BTAction_yp1cf"]
 script = ExtResource("3_hp412")
 
-[sub_resource type="BBVariant" id="BBVariant_etxof"]
-type = 24
+[sub_resource type="BBVariant" id="BBVariant_xqvgj"]
+type = 9
 value_source = 1
 variable = &"ball_location"
 resource_name = "$ball_location"
 
-[sub_resource type="BTSetVar" id="BTSetVar_qdbmy"]
+[sub_resource type="BTSetVar" id="BTSetVar_k8yhr"]
 variable = &"target_location"
-value = SubResource("BBVariant_etxof")
+value = SubResource("BBVariant_xqvgj")
 
 [sub_resource type="BTAction" id="BTAction_kaasl"]
 script = ExtResource("2_fs37m")
@@ -76,7 +76,7 @@ script = ExtResource("2_fs37m")
 [sub_resource type="BTParallel" id="BTParallel_6l01j"]
 num_successes_required = 2
 num_failures_required = 2
-children = [SubResource("BTAction_bfjcr"), SubResource("BTSetVar_qdbmy"), SubResource("BTAction_kaasl")]
+children = [SubResource("BTAction_yp1cf"), SubResource("BTSetVar_k8yhr"), SubResource("BTAction_kaasl")]
 
 [sub_resource type="BTSequence" id="BTSequence_al58p"]
 custom_name = "ChaseBall"
